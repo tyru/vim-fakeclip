@@ -140,9 +140,13 @@ endfunction
 
 function! s:read_clipboard_x()
   if executable('xsel')
-    return system('xsel --output --primary')
+    let options = {'cilpboard': '--clipboard', 'primary': '--primary', 'secondary': '--secondary'}
+    let selection_option = get(options, g:fakeclip_x_selection, 'primary')
+    return system('xsel --output ' . selection_option)
   elseif executable('xclip')
-    return system('xclip -o')
+    let options = {'cilpboard': '-selection clipboard', 'primary': '-selection primary', 'secondary': '-selection secondary'}
+    let selection_option = get(options, g:fakeclip_x_selection, 'primary')
+    return system('xclip -o ' . selection_option)
   endif
 endfunction
 
@@ -216,9 +220,13 @@ endfunction
 
 function! s:write_clipboard_x(text)
   if executable('xsel')
-    call system('xsel --input --primary', a:text)
+    let options = {'cilpboard': '--clipboard', 'primary': '--primary', 'secondary': '--secondary'}
+    let selection_option = get(options, g:fakeclip_x_selection, 'primary')
+    call system('xsel --input ' . selection_option, a:text)
   elseif executable('xclip')
-    call system('xclip', a:text)
+    let options = {'cilpboard': '-selection clipboard', 'primary': '-selection primary', 'secondary': '-selection secondary'}
+    let selection_option = get(options, g:fakeclip_x_selection, 'primary')
+    return system('xclip ' . selection_option)
   endif
 endfunction
 

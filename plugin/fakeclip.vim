@@ -216,6 +216,10 @@ if !exists('g:fakeclip_no_default_key_mappings')
   FakeclipDefaultKeyMappings
 endif
 
+if !exists('g:fakeclip_x_selection')
+    let g:fakeclip_x_selection = 'primary'
+endif
+
 
 
 
