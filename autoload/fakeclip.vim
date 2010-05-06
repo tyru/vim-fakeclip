@@ -27,7 +27,7 @@ if has('macunix') || system('uname') =~? '^darwin'
   let s:PLATFORM = 'mac'
 elseif has('win32unix')
   let s:PLATFORM = 'cygwin'
-elseif $DISPLAY != '' && executable('xclip')
+elseif $DISPLAY != '' && (executable('xsel') || executable('xclip'))
   let s:PLATFORM = 'x'
 else
   let s:PLATFORM = 'unknown'
@@ -139,7 +139,11 @@ endfunction
 
 
 function! s:read_clipboard_x()
-  return system('xclip -o')
+  if executable('xsel')
+    return system('xsel --output --primary')
+  elseif executable('xclip')
+    return system('xclip -o')
+  endif
 endfunction
 
 
@@ -211,8 +215,11 @@ endfunction
 
 
 function! s:write_clipboard_x(text)
-  call system('xclip', a:text)
-  return
+  if executable('xsel')
+    call system('xsel --input --primary', a:text)
+  elseif executable('xclip')
+    call system('xclip', a:text)
+  endif
 endfunction
 
 
